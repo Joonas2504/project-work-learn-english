@@ -1,0 +1,28 @@
+get http://localhost:8080/api/word-pairs
+
+###
+
+post http://localhost:8080/api/word-pairs
+Content-Type: application/json
+
+{
+    "finnish_word": "testi2",
+    "english_word": "test2"
+}
+
+###
+
+delete http://localhost:8080/api/word-pairs/21
+
+###
+
+put http://localhost:8080/api/word-pairs/23
+Content-Type: application/json
+
+{
+    "finnish_word": "päivitettySana",
+    "english_word": "UpdatedWord"
+}
+
+###
+
