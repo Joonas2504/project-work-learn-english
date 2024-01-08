@@ -5,38 +5,49 @@ const cors = require("cors");
 const port = 8080;
 const app = express();
 
+// Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
 
 // app.use(express.static("./frontend/dist"));
-// Add the body-parsing middleware to parse JSON request bodies
+
+// Add middleware to parse incoming JSON request bodies
 app.use(express.json());
 
+// Use the wordPairRouter for handling requests starting with "/api/word-pairs"
 app.use("/api/word-pairs", wordPairRouter);
 
 let server = undefined;
 
+// Start the server and listen on the specified port
 server = app
   .listen(port, () => {
     console.log(`Server listening on port ${port}`);
   })
   .on("error", (err) => {
+    // Handle errors that occur when starting the server
     console.error("Error starting server:", err);
     process.exit(1);
   });
 
+// Graceful shutdown function to be called on termination signals (SIGTERM, SIGINT)
 const gracefulShutdown = () => {
   console.log("Starting graceful shutdown...");
+
+  // If the server is running, close it
   if (server) {
     server.close((err) => {
       if (err) {
+        // Handle errors that occur when closing the server
         console.log("Error closing server", err);
         process.exit(1);
       } else {
         console.log("Server closed. Goodbye!");
 
+        // Gracefully close the MySQL connection
         console.log("MYSQL: Starting graceful shutdown...");
         db.connectionPool.end((err) => {
           if (err) {
+            // Handle errors that occur when closing the MySQL connection
             console.log("Error closing MySQL connection", err);
             process.exit(1);
           } else {
@@ -50,5 +61,6 @@ const gracefulShutdown = () => {
   }
 };
 
+// Handle termination signals for graceful shutdown
 process.on("SIGTERM", gracefulShutdown);
 process.on("SIGINT", gracefulShutdown);

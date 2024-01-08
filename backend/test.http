@@ -6,22 +6,22 @@ post http://localhost:8080/api/word-pairs
 Content-Type: application/json
 
 {
-    "finnish_word": "testi2",
-    "english_word": "test2"
+    "finnish_word": "testi kolme23",
+    "english_word": "test three"
 }
 
 ###
 
-delete http://localhost:8080/api/word-pairs/21
+delete http://localhost:8080/api/word-pairs/23
 
 ###
 
-put http://localhost:8080/api/word-pairs/23
+put http://localhost:8080/api/word-pairs/20
 Content-Type: application/json
 
 {
-    "finnish_word": "päivitettySana",
-    "english_word": "UpdatedWord"
+    "finnish_word": "päivitettySanaSuomi1",
+    "english_word": "UpdatedWordEnglish"
 }
 
 ###
