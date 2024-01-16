@@ -9,7 +9,7 @@ const app = express();
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 // Add middleware to parse incoming JSON request bodies
 app.use(express.json());
