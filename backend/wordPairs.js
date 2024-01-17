@@ -20,6 +20,22 @@ pairRouter.get("/", async (req, res) => {
   }
 });
 
+// Endpoint to retrieve a word pair by ID
+pairRouter.get("/:myId([0-9]+)", async (req, res) => {
+  // Extracting the ID from the request parameters
+  const id = parseInt(req.params.myId);
+  try {
+    // Fetching the word pair from the database by ID
+    const wordPair = await db.getByID(id);
+    // Sending the retrieved word pair as a JSON response
+    res.json(wordPair);
+  } catch (err) {
+    // Handling errors and sending an appropriate status code with error details
+    console.error(err);
+    res.status(500).json(err).end();
+  }
+});
+
 // Endpoint to add a new word pair
 pairRouter.post("/", async (req, res) => {
   try {

@@ -33,6 +33,34 @@ module.exports = {
     });
   },
 
+  // Retrieve a word pair from the database by ID
+  getByID: (id) => {
+    return new Promise((resolve, reject) => {
+      // Validate the ID against the predefined schema
+      const validationResults = validateId(id);
+
+      // If the validation fails, reject the promise with details of the error
+      if (!validationResults.valid) {
+        reject({ error: "Invalid ID", details: validationResults.errors });
+        return;
+      }
+
+      // SQL query to select a word pair from the 'word_pairs' table by ID
+      const query = "SELECT * FROM word_pairs WHERE id = ?";
+
+      pool.query(query, [id], (err, result) => {
+        // If exactly one word pair is found, resolve the Promise with the word pair data
+        result.length === 1
+          ? resolve(result[0])
+          : // If no or multiple word pairs are found, reject the Promise with an error object
+            reject({
+              error: `Error finding word pair by ID = ${id}`,
+              details: err,
+            });
+      });
+    });
+  },
+
   // Save a new word pair to the database
   save: (newPair) => {
     return new Promise((resolve, reject) => {
