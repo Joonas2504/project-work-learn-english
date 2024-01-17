@@ -61,7 +61,8 @@ module.exports = {
           err
             ? reject({ error: "Error inserting new word pair", details: err })
             : // If the query is successful, resolve with the results
-              resolve(results);
+              (newPair.id = results.insertId);
+          resolve(newPair);
         }
       );
     });
