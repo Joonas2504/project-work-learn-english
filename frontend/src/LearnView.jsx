@@ -12,6 +12,7 @@ const LearnView = () => {
   const [feedback, setFeedback] = useState(""); // Holds feedback messages
   const [languageMode, setLanguageMode] = useState("fi"); // Holds the current language mode (Finnish or English)
   const [checkedAnswers, setCheckedAnswers] = useState(Array(10).fill(false)); // Holds the checked status of each answer
+  const [showCongrats, setShowCongrats] = useState(false); // Holds the status of the congratulations message
 
   // Fetch word pairs from the API when the component mounts
   useEffect(() => {
@@ -56,6 +57,11 @@ const LearnView = () => {
       const newCheckedAnswers = [...checkedAnswers];
       newCheckedAnswers[index] = true; // Mark the answer as checked
       setCheckedAnswers(newCheckedAnswers); // Update the checkedAnswers state
+
+      // If the score is a multiple of 10, display the congratulations message
+      if ((score + 1) % 10 === 0) {
+        setShowCongrats(true);
+      }
     } else {
       setFeedback("Incorrect. Try again!"); // Provide feedback
 
@@ -80,6 +86,7 @@ const LearnView = () => {
     setUserInputs(Array(10).fill(""));
     setFeedback("");
     setCheckedAnswers(Array(10).fill(false));
+    setShowCongrats(false); // Reset the congratulations message
   };
 
   // Handle the Switch Language button click
@@ -151,7 +158,7 @@ const LearnView = () => {
       {/* Display feedback if there is any */}
       {feedback && <p>{feedback}</p>}
       {/* Display a congratulations message when the user has answered all word pairs correctly */}
-      {score >= 10 && (
+      {showCongrats && (
         <p>Congratulations! You have completed the word pairs.</p>
       )}
     </div>
