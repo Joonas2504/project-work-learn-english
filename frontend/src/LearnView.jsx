@@ -8,6 +8,7 @@ const LearnView = () => {
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [languageMode, setLanguageMode] = useState("fi"); // Default to Finnish
+  const [checkedAnswers, setCheckedAnswers] = useState(Array(10).fill(false));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +32,10 @@ const LearnView = () => {
   };
 
   const handleCheckAnswer = (index) => {
+    if (checkedAnswers[index]) {
+      return;
+    }
+
     const currentPair = wordPairs[currentWordIndex + index];
     const correctAnswer =
       languageMode === "fi"
@@ -40,6 +45,10 @@ const LearnView = () => {
     if (userInputs[index].toLowerCase() === correctAnswer.toLowerCase()) {
       setScore(score + 1);
       setFeedback("Correct!");
+
+      const newCheckedAnswers = [...checkedAnswers];
+      newCheckedAnswers[index] = true;
+      setCheckedAnswers(newCheckedAnswers);
     } else {
       setFeedback("Incorrect. Try again!");
 
@@ -64,6 +73,7 @@ const LearnView = () => {
     // Reset user input and feedback
     setUserInputs(Array(10).fill(""));
     setFeedback("");
+    setCheckedAnswers(Array(10).fill(false));
   };
 
   const handleSwitchLanguage = () => {
