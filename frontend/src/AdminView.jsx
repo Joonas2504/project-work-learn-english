@@ -42,7 +42,6 @@ const AdminView = () => {
       console.error("Error adding word pair:", error);
     }
   };
-
   return (
     <div>
       <h1>Admin View</h1>
@@ -59,9 +58,26 @@ const AdminView = () => {
         onChange={(event) => setNewEnglishWord(event.target.value)}
         placeholder="New English word"
       />
-
       {/* Button to add the new word pair */}
       <button onClick={handleAddWordPair}>Add Word Pair</button>
+
+      {/* Table to display the word pairs */}
+      <table>
+        <thead>
+          <tr>
+            <th>English Word</th>
+            <th>Finnish Word</th>
+          </tr>
+        </thead>
+        <tbody>
+          {wordPairs.map((pair) => (
+            <tr key={pair.id}>
+              <td>{pair.english_word}</td>
+              <td>{pair.finnish_word}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
