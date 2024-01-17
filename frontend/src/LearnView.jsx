@@ -78,6 +78,10 @@ const LearnView = () => {
 
   const handleSwitchLanguage = () => {
     setLanguageMode((prevMode) => (prevMode === "fi" ? "en" : "fi"));
+
+    // Clear the input fields
+    setUserInputs(Array(10).fill(""));
+    setCheckedAnswers(Array(10).fill(false));
   };
 
   // Display ten words at once
