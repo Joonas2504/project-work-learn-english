@@ -1,11 +1,30 @@
-import LearnView from "./LearnView"; // Adjust the path as needed
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import LearnView from "./LearnView";
+import AdminView from "./AdminView"; // Import the AdminView component
 
 const App = () => {
   return (
-    <div>
-      {/* You can add a header or any other content here if needed */}
-      <LearnView />
-    </div>
+    <Router>
+      <div>
+        {/* Navigation links */}
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Learn</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Route configuration */}
+        <Routes>
+          <Route path="/admin" element={<AdminView />} />
+          <Route path="/" element={<LearnView />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
