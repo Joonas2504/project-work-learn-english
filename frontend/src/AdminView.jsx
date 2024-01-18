@@ -1,9 +1,10 @@
 // Import necessary hooks and axios for API calls
 import { useState, useEffect } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 // Define the AdminView component
-const AdminView = () => {
+const AdminView = ({ onLogout }) => {
   // Define state variables
   const [wordPairs, setWordPairs] = useState([]); // Holds the word pairs fetched from the API
   const [newFinnishWord, setNewFinnishWord] = useState(""); // Holds the new Finnish word to be added
@@ -234,8 +235,14 @@ const AdminView = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Call the logout function from the parent component
+    onLogout();
+  };
+
   return (
     <div>
+      <button onClick={handleLogout}>Logout</button>
       <h1>Admin View</h1>
       {/* Input fields for the new word pair */}
       <input
@@ -332,6 +339,10 @@ const AdminView = () => {
       )}
     </div>
   );
+};
+
+AdminView.propTypes = {
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default AdminView;
