@@ -62,10 +62,10 @@ module.exports = {
   },
 
   // Save a new word pair to the database
-  save: (newPair) => {
+  save: (wordPair) => {
     return new Promise((resolve, reject) => {
-      // Validate the new word pair against the predefined schema
-      const validationResults = validateWordPair(newPair);
+      // Validate the word pair against the predefined schema
+      const validationResults = validateWordPair(wordPair);
 
       // If the validation fails, reject the promise with details of the error
       if (!validationResults.valid) {
@@ -76,21 +76,33 @@ module.exports = {
         return;
       }
 
-      // SQL query to insert a new word pair into the 'word_pairs' table
-      const query =
-        "INSERT INTO word_pairs (finnish_word, english_word) VALUES (?, ?)";
+      // SQL query to check if the word pair already exists
+      const checkQuery =
+        "SELECT * FROM word_pairs WHERE finnish_word = ? OR english_word = ?";
 
-      // Execute the query using the database connection pool
       pool.query(
-        query,
-        [newPair.finnish_word, newPair.english_word],
-        (err, results) => {
-          // If an error occurs during the query execution
-          err
-            ? reject({ error: "Error inserting new word pair", details: err })
-            : // If the query is successful, resolve with the results
-              (newPair.id = results.insertId);
-          resolve(newPair);
+        checkQuery,
+        [wordPair.finnish_word, wordPair.english_word],
+        (err, result) => {
+          // If the word pair exists, reject the promise with an error
+          if (result.length > 0) {
+            reject({ error: "Word pair already exists" });
+            return;
+          }
+
+          // SQL query to insert a new word pair into the 'word_pairs' table
+          const insertQuery = "INSERT INTO word_pairs SET ?";
+
+          pool.query(insertQuery, wordPair, (err, result) => {
+            // If an error occurs, reject the promise with details of the error
+            if (err) {
+              reject({ error: "Error saving word pair", details: err });
+              return;
+            }
+
+            // If the word pair is successfully saved, resolve the promise with the ID of the new word pair
+            resolve(result.insertId);
+          });
         }
       );
     });
@@ -125,42 +137,48 @@ module.exports = {
     });
   },
 
-  // Update a word pair in the database by ID
-  update: (id, updatedPair) => {
+  // Update a word pair in the database
+  update: (id, wordPair) => {
     return new Promise((resolve, reject) => {
-      // Validate the ID and updated word pair against predefined schemas
-      const isIdValid = validateId(id);
-      const isPairValid = validateWordPair(updatedPair);
+      // Validate the word pair against the predefined schema
+      const validationResults = validateWordPair(wordPair);
 
-      // If either the ID or word pair is invalid, reject with details of the errors
-      if (!isIdValid.valid || !isPairValid.valid) {
+      // If the validation fails, reject the promise with details of the error
+      if (!validationResults.valid) {
         reject({
-          error: "Invalid ID and word pair",
-          details: {
-            idErrors: isIdValid.errors,
-            pairErrors: isPairValid.errors,
-          },
+          error: "Invalid word pair",
+          details: validationResults.errors,
         });
         return;
       }
 
-      // SQL query to update a word pair in the 'word_pairs' table by ID
-      const query =
-        "UPDATE word_pairs SET finnish_word = ?, english_word = ? WHERE id = ?";
+      // SQL query to check if the word pair already exists
+      const checkQuery =
+        "SELECT * FROM word_pairs WHERE finnish_word = ? OR english_word = ? AND id != ?";
 
-      // Execute the query using the database connection pool
       pool.query(
-        query,
-        [updatedPair.finnish_word, updatedPair.english_word, id],
-        (err, results) => {
-          // If the affected rows are zero, reject with a 'not found' error
-          results.affectedRows === 0
-            ? reject({
-                error: `No word pair found with ID = ${id}`,
-                details: err,
-              })
-            : // If the query is successful, resolve with the results
-              resolve(results);
+        checkQuery,
+        [wordPair.finnish_word, wordPair.english_word, id],
+        (err, result) => {
+          // If the word pair exists, reject the promise with an error
+          if (result.length > 0) {
+            reject({ error: "Word pair already exists" });
+            return;
+          }
+
+          // SQL query to update the word pair in the 'word_pairs' table
+          const updateQuery = "UPDATE word_pairs SET ? WHERE id = ?";
+
+          pool.query(updateQuery, [wordPair, id], (err, result) => {
+            // If an error occurs, reject the promise with details of the error
+            if (err) {
+              reject({ error: "Error updating word pair", details: err });
+              return;
+            }
+
+            // If the word pair is successfully updated, resolve the promise
+            resolve(result);
+          });
         }
       );
     });
