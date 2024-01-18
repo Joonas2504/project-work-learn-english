@@ -93,15 +93,13 @@ module.exports = {
           // SQL query to insert a new word pair into the 'word_pairs' table
           const insertQuery = "INSERT INTO word_pairs SET ?";
 
-          pool.query(insertQuery, wordPair, (err, result) => {
-            // If an error occurs, reject the promise with details of the error
-            if (err) {
-              reject({ error: "Error saving word pair", details: err });
-              return;
-            }
-
-            // If the word pair is successfully saved, resolve the promise with the ID of the new word pair
-            resolve(result.insertId);
+          pool.query(insertQuery, [wordPair], (err, results) => {
+            // If an error occurs during the query execution
+            err
+              ? reject({ error: "Error inserting new word pair", details: err })
+              : // If the query is successful, resolve with the results
+                (wordPair.id = results.insertId);
+            resolve(wordPair);
           });
         }
       );
