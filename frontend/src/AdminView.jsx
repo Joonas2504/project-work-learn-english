@@ -23,7 +23,7 @@ const AdminView = ({ onLogout }) => {
       if (showWordPairs) {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/word-pairs`
+            "http://localhost:8080/api/word-pairs"
           );
           setWordPairs(response.data); // Update the wordPairs state with the fetched data
         } catch (error) {
@@ -41,7 +41,7 @@ const AdminView = ({ onLogout }) => {
       if (updateId.id) {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/word-pairs/${updateId.id}`
+            `http://localhost:8080/api/word-pairs/${updateId.id}`
           );
           setUpdateFinnishWord(response.data.finnish_word); // Update the Finnish word to be updated
           setUpdateEnglishWord(response.data.english_word); // Update the English word to be updated
@@ -80,7 +80,7 @@ const AdminView = ({ onLogout }) => {
     // Try to add the new word pair to the database
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs`,
+        "http://localhost:8080/api/word-pairs",
         {
           finnish_word: newFinnishWord,
           english_word: newEnglishWord,
@@ -102,7 +102,7 @@ const AdminView = ({ onLogout }) => {
   const handleFetchById = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs/${inputId}`
+        `http://localhost:8080/api/word-pairs/${inputId}`
       );
 
       // If the word pair is found, set it in the state for display
@@ -144,7 +144,7 @@ const AdminView = ({ onLogout }) => {
     try {
       // Send a PUT request to the server to update the word pair
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs/${updateId.id}`,
+        `http://localhost:8080/api/word-pairs/${updateId.id}`,
         {
           finnish_word: updateFinnishWord,
           english_word: updateEnglishWord,
@@ -165,7 +165,7 @@ const AdminView = ({ onLogout }) => {
 
       // Fetch the updated list of word pairs from the server
       const updatedWordPairs = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs`
+        "http://localhost:8080/api/word-pairs"
       );
       // Update the wordPairs state with the updated list
       setWordPairs(updatedWordPairs.data);
@@ -185,7 +185,7 @@ const AdminView = ({ onLogout }) => {
     try {
       // Send a GET request to the server to fetch the word pair
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs/${deleteId}`
+        `http://localhost:8080/api/word-pairs/${deleteId}`
       );
 
       // If the word pair is found, set it in the deleteWordPair state
@@ -210,7 +210,7 @@ const AdminView = ({ onLogout }) => {
     try {
       // Send a DELETE request to the server to delete the word pair
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs/${deleteWordPair.id}`
+        `http://localhost:8080/api/word-pairs/${deleteWordPair.id}`
       );
       console.log(response.data); // Log the response data
 
@@ -225,7 +225,7 @@ const AdminView = ({ onLogout }) => {
 
       // Fetch the updated list of word pairs from the server
       const updatedWordPairs = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs`
+        "http://localhost:8080/api/word-pairs"
       );
       // Update the wordPairs state with the updated list
       setWordPairs(updatedWordPairs.data);
