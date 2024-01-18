@@ -9,9 +9,11 @@ const AdminView = () => {
   const [newFinnishWord, setNewFinnishWord] = useState(""); // Holds the new Finnish word to be added
   const [newEnglishWord, setNewEnglishWord] = useState(""); // Holds the new English word to be added
   const [updateId, setUpdateId] = useState({ id: "", index: -1 }); // Holds the id of the word pair to be updated
-  const [updateFinnishWord, setUpdateFinnishWord] = useState("");
-  const [updateEnglishWord, setUpdateEnglishWord] = useState("");
-  const [inputId, setInputId] = useState("");
+  const [updateFinnishWord, setUpdateFinnishWord] = useState(""); // Holds the updated Finnish word
+  const [updateEnglishWord, setUpdateEnglishWord] = useState(""); // Holds the updated English word
+  const [inputId, setInputId] = useState(""); // Holds the input ID for fetching a word pair
+  const [deleteWordPair, setDeleteWordPair] = useState([null]); // Holds the word pair to be deleted
+  const [deleteId, setDeleteId] = useState(""); // Holds the ID of the word pair to be deleted
 
   // Fetch word pairs from the API when the component mounts
   useEffect(() => {
@@ -27,8 +29,9 @@ const AdminView = () => {
     };
 
     fetchData();
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount
 
+  // Fetch a word pair when updateId.id changes
   useEffect(() => {
     const fetchWordPair = async () => {
       if (updateId.id) {
@@ -36,8 +39,8 @@ const AdminView = () => {
           const response = await axios.get(
             `http://localhost:8080/api/word-pairs/${updateId.id}`
           );
-          setUpdateFinnishWord(response.data.finnish_word);
-          setUpdateEnglishWord(response.data.english_word);
+          setUpdateFinnishWord(response.data.finnish_word); // Update the Finnish word to be updated
+          setUpdateEnglishWord(response.data.english_word); // Update the English word to be updated
         } catch (error) {
           console.error("Error fetching word pair:", error);
         }
@@ -52,7 +55,7 @@ const AdminView = () => {
     // Check if the new Finnish or English word is empty
     if (!newFinnishWord || !newEnglishWord) {
       alert("Please enter a Finnish and English word.");
-      return; // Do not add the pair to the list
+      return; // Do not add the pair to the list if either word is empty
     }
 
     // Check if the pair is already in the list (case-insensitive)
@@ -67,9 +70,10 @@ const AdminView = () => {
       alert(
         `Word pair "${newFinnishWord} - ${newEnglishWord}" already exists.`
       );
-      return; // Do not add the pair to the list
+      return; // Do not add the pair to the list if it already exists
     }
 
+    // Try to add the new word pair to the database
     try {
       const response = await axios.post(
         "http://localhost:8080/api/word-pairs",
@@ -86,50 +90,55 @@ const AdminView = () => {
       setNewFinnishWord("");
       setNewEnglishWord("");
     } catch (error) {
-      console.error("Error adding word pair:", error);
+      console.error("Error adding word pair:", error); // Log any error that occurs during the process
     }
   };
 
+  // Fetch a word pair by its ID
   const handleFetchById = async () => {
     try {
       const response = await axios.get(
         `http://localhost:8080/api/word-pairs/${inputId}`
       );
-      // Set the updateFinnishWord and updateEnglishWord states with the fetched data
+
+      // If the word pair is found, set it in the state for display
       setUpdateFinnishWord(response.data.finnish_word);
       setUpdateEnglishWord(response.data.english_word);
-      setUpdateId({ id: inputId, index: -1 }); // Set index to an appropriate value based on your logic
+      setUpdateId({ id: inputId, index: -1 }); // Set the ID and index of the word pair to be updated
     } catch (error) {
-      console.error(`Error fetching word pair with id ${inputId}:`);
-      // Handle error: display a message to the user
-      alert(`Error fetching word pair with id ${inputId}: ${error.message}`);
+      console.error(`Error fetching word pair with id ${inputId}:`, error); // Log any error that occurs during the process
+      // If the word pair is not found, reset the state
+      // Inform the user that the ID is not found
+      alert(`No word pair found with ID ${inputId}.`);
     }
   };
 
+  // Handle the update of a word pair
   const handleUpdateWordPair = async () => {
     // Check if the updated Finnish or English word is empty
     if (!updateFinnishWord || !updateEnglishWord) {
       alert("Please enter an updated Finnish and English word.");
-      return; // Do not update the pair
+      return; // If either word is empty, do not proceed with the update
     }
 
     // Check if the updated pair is already in the list (case-insensitive)
     const isPairInList = wordPairs.some(
       (pair) =>
-        pair.finnish_word.toLowerCase() === updateFinnishWord.toLowerCase() ||
+        pair.finnish_word.toLowerCase() === updateFinnishWord.toLowerCase() &&
         pair.english_word.toLowerCase() === updateEnglishWord.toLowerCase()
     );
 
     if (isPairInList) {
-      // Display a message to the user that the updated pair already exists
+      // If the updated pair already exists in the list, inform the user and do not proceed with the update
       alert(
         `Updated word pair "${updateFinnishWord} - ${updateEnglishWord}" already exists.`
       );
-      return; // Do not update the pair
+      return;
     }
 
-    // Continue with the update logic
+    // If the updated pair is not already in the list, proceed with the update
     try {
+      // Send a PUT request to the server to update the word pair
       const response = await axios.put(
         `http://localhost:8080/api/word-pairs/${updateId.id}`,
         {
@@ -143,23 +152,81 @@ const AdminView = () => {
         }
       );
 
+      // Update the wordPairs state with the updated word pair
       setWordPairs((prevWordPairs) =>
         prevWordPairs.map((pair, index) =>
           index === updateId.index ? response.data : pair
         )
       );
 
-      // Update the word pairs immediately after a successful update
+      // Fetch the updated list of word pairs from the server
       const updatedWordPairs = await axios.get(
         "http://localhost:8080/api/word-pairs"
       );
+      // Update the wordPairs state with the updated list
       setWordPairs(updatedWordPairs.data);
 
+      // Reset the updateFinnishWord, updateEnglishWord, and updateId states
       setUpdateFinnishWord("");
       setUpdateEnglishWord("");
-      setUpdateId({ id: "", index: -1 }); // Reset updateId
+      setUpdateId({ id: "", index: -1 });
     } catch (error) {
+      // If an error occurs during the update, log it to the console
       console.error("Error updating word pair:", error);
+    }
+  };
+
+  // Handle the fetch of a word pair for deletion
+  const handleFetchForDelete = async () => {
+    try {
+      // Send a GET request to the server to fetch the word pair
+      const response = await axios.get(
+        `http://localhost:8080/api/word-pairs/${deleteId}`
+      );
+
+      // If the word pair is found, set it in the deleteWordPair state
+      setDeleteWordPair(response.data);
+    } catch (error) {
+      // If an error occurs during the fetch, log it to the console
+      console.error(`Error fetching word pair with id ${deleteId}:`, error);
+      // If the word pair is not found, reset the deleteWordPair state and inform the user
+      setDeleteWordPair(null);
+      alert(`No word pair found with ID ${deleteId}.`);
+    }
+  };
+
+  // Handle the deletion of a word pair
+  const handleDeleteWordPair = async () => {
+    // Check if a word pair has been fetched for deletion
+    if (!deleteWordPair || !deleteWordPair.id) {
+      alert("Please fetch a word pair by ID first.");
+      return; // If no word pair has been fetched, do not proceed with the deletion
+    }
+
+    try {
+      // Send a DELETE request to the server to delete the word pair
+      const response = await axios.delete(
+        `http://localhost:8080/api/word-pairs/${deleteWordPair.id}`
+      );
+      console.log(response.data); // Log the response data
+
+      // Inform the user that the word pair has been deleted
+      alert(
+        `Word pair deleted: "${deleteWordPair.finnish_word} - ${deleteWordPair.english_word}"`
+      );
+
+      // Reset the deleteWordPair state after a successful deletion
+      setDeleteWordPair(null);
+
+      // Fetch the updated list of word pairs from the server
+      const updatedWordPairs = await axios.get(
+        "http://localhost:8080/api/word-pairs"
+      );
+      // Update the wordPairs state with the updated list
+      setWordPairs(updatedWordPairs.data);
+    } catch (error) {
+      // If an error occurs during the deletion, log it to the console
+      console.error("Error deleting word pair:", error);
     }
   };
 
@@ -183,12 +250,12 @@ const AdminView = () => {
       <button onClick={handleAddWordPair}>Add Word Pair</button>
       <br />
       {/* Input field for the ID of the word pair to be updated */}
-
       <input
         type="text"
         value={inputId}
         onChange={(e) => setInputId(e.target.value)}
       />
+      {/* Button to fetch the word pair by ID */}
       <button onClick={handleFetchById}>Fetch by ID</button>
       {/* Input fields for the updated word pair */}
       <input
@@ -205,6 +272,32 @@ const AdminView = () => {
       />
       {/* Button to update the word pair */}
       <button onClick={() => handleUpdateWordPair(updateId.id)}>Update</button>
+
+      <br />
+
+      {/* Input field for the ID of the word pair to be deleted */}
+      <input
+        type="text"
+        value={deleteId}
+        onChange={(e) => setDeleteId(e.target.value)}
+      />
+      {/* Button to fetch the word pair by ID for deletion */}
+      <button onClick={handleFetchForDelete}>Fetch by ID</button>
+      {/* Read-only input field to display the fetched word pair */}
+      <input
+        type="text"
+        value={
+          deleteWordPair
+            ? `${deleteWordPair.finnish_word} - ${deleteWordPair.english_word}`
+            : "No word pair fetched."
+        }
+        readOnly
+      />
+      {/* Button to delete the fetched word pair */}
+      <button onClick={handleDeleteWordPair} disabled={!deleteWordPair}>
+        Delete Word Pair
+      </button>
+
       {/* Table to display the word pairs */}
       <table>
         <thead>
@@ -215,6 +308,7 @@ const AdminView = () => {
           </tr>
         </thead>
         <tbody>
+          {/* Map through the wordPairs array and create a table row for each word pair */}
           {wordPairs.map((pair) => (
             <tr key={pair.id}>
               <td>{pair.id}</td>
