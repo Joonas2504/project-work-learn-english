@@ -2,14 +2,14 @@ const express = require("express");
 const wordPairRouter = require("./wordPairs");
 const db = require("./dbFunctions");
 const cors = require("cors");
-const path = require("path");
+//const path = require("path");
 const port = 8080;
 const app = express();
 
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static("../frontend/dist"));
 
 // Add middleware to parse incoming JSON request bodies
 app.use(express.json());

@@ -19,7 +19,7 @@ const LearnView = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/word-pairs"
+          `${import.meta.env.VITE_API_URL}/api/wordpairs`
         );
         setWordPairs(response.data); // Update the wordPairs state with the fetched data
       } catch (error) {
