@@ -1,10 +1,14 @@
+require("dotenv").config();
 const express = require("express");
 const wordPairRouter = require("./wordPairs");
 const db = require("./dbFunctions");
 const cors = require("cors");
-//const path = require("path");
 const port = 8080;
 const app = express();
+
+// Admin credentials
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
@@ -14,6 +18,16 @@ app.use(express.static("./frontend/dist"));
 
 // Add middleware to parse incoming JSON request bodies
 app.use(express.json());
+
+// Authentication endpoint
+app.post("/api/auth", (req, res) => {
+  const { username, password } = req.body;
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(401).json({ success: false });
+  }
+});
 
 // Use the wordPairRouter for handling requests starting with "/api/word-pairs"
 app.use("/api/word-pairs", wordPairRouter);

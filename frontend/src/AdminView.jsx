@@ -41,7 +41,7 @@ const AdminView = ({ onLogout }) => {
       if (updateId.id) {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/word-pairs${updateId.id}`
+            `${import.meta.env.VITE_API_URL}/api/word-pairs/${updateId.id}`
           );
           setUpdateFinnishWord(response.data.finnish_word); // Update the Finnish word to be updated
           setUpdateEnglishWord(response.data.english_word); // Update the English word to be updated
@@ -102,7 +102,7 @@ const AdminView = ({ onLogout }) => {
   const handleFetchById = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs${inputId}`
+        `${import.meta.env.VITE_API_URL}/api/word-pairs/${inputId}`
       );
 
       // If the word pair is found, set it in the state for display
@@ -144,7 +144,7 @@ const AdminView = ({ onLogout }) => {
     try {
       // Send a PUT request to the server to update the word pair
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs${updateId.id}`,
+        `${import.meta.env.VITE_API_URL}/api/word-pairs/${updateId.id}`,
         {
           finnish_word: updateFinnishWord,
           english_word: updateEnglishWord,
@@ -185,7 +185,7 @@ const AdminView = ({ onLogout }) => {
     try {
       // Send a GET request to the server to fetch the word pair
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs${deleteId}`
+        `${import.meta.env.VITE_API_URL}/api/word-pairs/${deleteId}`
       );
 
       // If the word pair is found, set it in the deleteWordPair state
@@ -210,7 +210,7 @@ const AdminView = ({ onLogout }) => {
     try {
       // Send a DELETE request to the server to delete the word pair
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/word-pairs${deleteWordPair.id}`
+        `${import.meta.env.VITE_API_URL}/api/word-pairs/${deleteWordPair.id}`
       );
       console.log(response.data); // Log the response data
 

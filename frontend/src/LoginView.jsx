@@ -2,10 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-// Fetch admin username and password from environment variables
-const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
-
 const LoginView = ({ setIsAuthenticated }) => {
   // State to hold username and password input values
   const [username, setUsername] = useState("");
@@ -17,14 +13,23 @@ const LoginView = ({ setIsAuthenticated }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Check if entered credentials match admin username and password
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      // Set authentication status to true and navigate to admin view
+    // Send a POST request to the /api/auth endpoint
+    const response = await fetch("/api/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    // Check the response status
+    if (response.ok) {
+      // If the login was successful, set authentication status to true and navigate to admin view
       setIsAuthenticated(true);
       navigate("/admin");
     } else {
+      // If the login failed, show an error message
       console.log("Credentials are incorrect.");
-      // The entered credentials are incorrect. Show an error message...
     }
   };
 
