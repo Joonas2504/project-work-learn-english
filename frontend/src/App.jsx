@@ -6,8 +6,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import { useState } from "react";
 
 const App = () => {
+  // State to track authentication status
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Function to handle logout and update authentication status
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
@@ -15,6 +17,7 @@ const App = () => {
   return (
     <Router>
       <div>
+        {/* Navigation links */}
         <nav>
           <ul>
             <li>
@@ -26,11 +29,14 @@ const App = () => {
           </ul>
         </nav>
 
+        {/* Route configuration */}
         <Routes>
+          {/* Route for the login page */}
           <Route
             path="/login"
             element={<LoginView setIsAuthenticated={setIsAuthenticated} />}
           />
+          {/* Route for the admin page with protection */}
           <Route
             path="/admin"
             element={
@@ -40,6 +46,7 @@ const App = () => {
               />
             }
           />
+          {/* Default route for the learn page */}
           <Route path="/" element={<LearnView />} />
         </Routes>
       </div>
