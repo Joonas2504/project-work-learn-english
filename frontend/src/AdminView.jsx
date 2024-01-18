@@ -12,24 +12,27 @@ const AdminView = () => {
   const [updateFinnishWord, setUpdateFinnishWord] = useState(""); // Holds the updated Finnish word
   const [updateEnglishWord, setUpdateEnglishWord] = useState(""); // Holds the updated English word
   const [inputId, setInputId] = useState(""); // Holds the input ID for fetching a word pair
-  const [deleteWordPair, setDeleteWordPair] = useState([null]); // Holds the word pair to be deleted
+  const [deleteWordPair, setDeleteWordPair] = useState(""); // Holds the word pair to be deleted
   const [deleteId, setDeleteId] = useState(""); // Holds the ID of the word pair to be deleted
+  const [showWordPairs, setShowWordPairs] = useState(false);
 
-  // Fetch word pairs from the API when the component mounts
+  // Fetch word pairs from the API when showWordPairs changes to true
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/word-pairs"
-        );
-        setWordPairs(response.data); // Update the wordPairs state with the fetched data
-      } catch (error) {
-        console.error("Error fetching word pairs:", error);
+      if (showWordPairs) {
+        try {
+          const response = await axios.get(
+            "http://localhost:8080/api/word-pairs"
+          );
+          setWordPairs(response.data); // Update the wordPairs state with the fetched data
+        } catch (error) {
+          console.error("Error fetching word pairs:", error);
+        }
       }
     };
 
     fetchData();
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [showWordPairs]); // Dependency array includes showWordPairs
 
   // Fetch a word pair when updateId.id changes
   useEffect(() => {
@@ -216,7 +219,8 @@ const AdminView = () => {
       );
 
       // Reset the deleteWordPair state after a successful deletion
-      setDeleteWordPair(null);
+      setDeleteWordPair("");
+      setDeleteId("");
 
       // Fetch the updated list of word pairs from the server
       const updatedWordPairs = await axios.get(
@@ -289,7 +293,7 @@ const AdminView = () => {
         value={
           deleteWordPair
             ? `${deleteWordPair.finnish_word} - ${deleteWordPair.english_word}`
-            : "No word pair fetched."
+            : "Fetch word pair by ID first."
         }
         readOnly
       />
@@ -298,27 +302,34 @@ const AdminView = () => {
         Delete Word Pair
       </button>
 
-      {/* Table to display the word pairs */}
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Finnish Word</th>
-            <th>English Word</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through the wordPairs array and create a table row for each word pair */}
-          {wordPairs.map((pair) => (
-            <tr key={pair.id}>
-              <td>{pair.id}</td>
-              <td>{pair.finnish_word}</td>
-              <td>{pair.english_word}</td>
-              <td></td>
+      <br />
+
+      {/* Button to set showWordPairs to true */}
+      <button onClick={() => setShowWordPairs(true)}>Fetch All Words</button>
+      <button onClick={() => setShowWordPairs(false)}>Hide Words</button>
+
+      {/* Table to display the word pairs, only if showWordPairs is true */}
+      {showWordPairs && (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Finnish Word</th>
+              <th>English Word</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {/* Map through the wordPairs array and create a table row for each word pair */}
+            {wordPairs.map((pair) => (
+              <tr key={pair.id}>
+                <td>{pair.id}</td>
+                <td>{pair.finnish_word}</td>
+                <td>{pair.english_word}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
