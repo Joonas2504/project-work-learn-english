@@ -18,8 +18,9 @@ Joonas Moilanen
 2. Navigate to folder where `project-work-learn-english` is.
 3. Running app via workspaces: `npm install-all` then `npm run start`.
 4. Follow link http://localhost:5173/ to use app.
-5. Using Docker: `docker-compose build` then `docker-compose up`.
-6. Follow link http://localhost:8080/ to use app.
+- OR
+6. Using Docker: `docker-compose build` then `docker-compose up`.
+7. Follow link http://localhost:8080/ to use app.
 
 ## Screenshots
 ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/123476ac-eb68-4e5b-9735-ae30c8899b11) ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/ce2a91e3-59d8-4bca-8c44-3ace5edcae96)
