@@ -106,7 +106,23 @@ const LearnView = () => {
 
   return (
     <div>
-      <h1>Learn Words</h1>
+      <h1>Welcome To Learn English</h1>
+      <br />
+      {/* Display the user's score */}
+      <p>Score: {score}</p>
+      {/* Button to generate new words */}
+      <button onClick={handleGenerateNewWords}>Generate New Words</button>
+      {/* Button to switch the language mode */}
+      <button onClick={handleSwitchLanguage}>
+        Switch to {languageMode === "fi" ? "English" : "Finnish"}
+      </button>
+      {/* Display feedback if there is any */}
+      {feedback && <p>{feedback}</p>}
+      {/* Display a congratulations message when the user has answered all word pairs correctly */}
+      {showCongrats && (
+        <p>Congratulations! You have completed the word pairs.</p>
+      )}
+
       {/* Check if there are words to display */}
       {wordsToDisplay.length > 0 && (
         <table>
@@ -146,20 +162,6 @@ const LearnView = () => {
             ))}
           </tbody>
         </table>
-      )}
-      {/* Button to generate new words */}
-      <button onClick={handleGenerateNewWords}>Generate New Words</button>
-      {/* Button to switch the language mode */}
-      <button onClick={handleSwitchLanguage}>
-        Switch to {languageMode === "fi" ? "English" : "Finnish"}
-      </button>
-      {/* Display the user's score */}
-      <p>Score: {score}</p>
-      {/* Display feedback if there is any */}
-      {feedback && <p>{feedback}</p>}
-      {/* Display a congratulations message when the user has answered all word pairs correctly */}
-      {showCongrats && (
-        <p>Congratulations! You have completed the word pairs.</p>
       )}
     </div>
   );
