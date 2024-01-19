@@ -13,6 +13,13 @@ const LoginView = ({ setIsAuthenticated }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!username) {
+      alert("Username is required.");
+      return;
+    } else if (!password) {
+      alert("Password is required.");
+      return;
+    }
     // Send a POST request to the /api/auth endpoint
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth`, {
       method: "POST",
@@ -28,6 +35,7 @@ const LoginView = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate("/admin");
     } else {
+      alert("Credentials are incorrect.");
       // If the login failed, show an error message
       console.log("Credentials are incorrect.");
     }

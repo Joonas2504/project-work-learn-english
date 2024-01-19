@@ -90,6 +90,9 @@ const AdminView = ({ onLogout }) => {
 
       // Add the new word pair to the wordPairs state
       setWordPairs([...wordPairs, response.data]);
+      alert(
+        `Word pair "${newFinnishWord} - ${newEnglishWord}" added successfully.`
+      );
       // Clear the new Finnish and English word input fields
       setNewFinnishWord("");
       setNewEnglishWord("");
@@ -167,9 +170,10 @@ const AdminView = ({ onLogout }) => {
       const updatedWordPairs = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/word-pairs`
       );
+      setInputId(""); // Reset the inputId state
       // Update the wordPairs state with the updated list
       setWordPairs(updatedWordPairs.data);
-
+      alert("Updated word pair succesfully.");
       // Reset the updateFinnishWord, updateEnglishWord, and updateId states
       setUpdateFinnishWord("");
       setUpdateEnglishWord("");
