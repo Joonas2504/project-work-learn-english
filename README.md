@@ -26,7 +26,7 @@ Joonas Moilanen
 
 ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/f694848f-a75a-4470-ada3-f24605375581) ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/2975ac10-a2db-48fc-af9f-8fb6f2ff635d)
 
-![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/d8d23f3f-bab7-40d3-ae15-76ff4a422526) ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/c52820d7-b603-42d3-b068-02cb996766ab)
+![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/c52820d7-b603-42d3-b068-02cb996766ab)
 
 ## Links
 ### Cloud
