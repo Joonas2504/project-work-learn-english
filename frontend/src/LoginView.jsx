@@ -63,7 +63,7 @@ const LoginView = ({ setIsAuthenticated }) => {
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
       />
-      {/* Input for password */}
+      {/* Input for password. */}
       <input
         type="password"
         value={password}

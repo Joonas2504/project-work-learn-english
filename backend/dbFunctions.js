@@ -5,6 +5,7 @@ const { validateWordPair, validateId } = require("./validation");
 
 /**
  * Create a connection pool to the database using the environment variables
+ * @type {Pool}
  */
 const pool = mysql.createPool({
   connectionLimit: 10,

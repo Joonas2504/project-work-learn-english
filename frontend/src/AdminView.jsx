@@ -187,7 +187,7 @@ const AdminView = () => {
         }
       );
 
-      // Update the wordPairs state with the updated word pair
+      // Update the wordPairs state with the updated word pair.
       setWordPairs((prevWordPairs) =>
         prevWordPairs.map((pair, index) =>
           index === updateId.index ? response.data : pair

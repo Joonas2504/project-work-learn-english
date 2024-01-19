@@ -10,7 +10,7 @@ const express = require("express");
 const db = require("./dbFunctions");
 
 /**
- * Instance of an Express Router to handle word pair endpoints.
+ * Instance of an Express Router to handle word pair endpoints
  * @type {express.Router}
  */
 const pairRouter = express.Router();

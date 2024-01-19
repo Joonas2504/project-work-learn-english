@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 
 /**
- * Root rendering function for the React application.
+ * Root rendering function for the React application
  * @function
  * @name renderRoot
  * @param {HTMLElement} rootElement - The root element where the React application will be rendered.

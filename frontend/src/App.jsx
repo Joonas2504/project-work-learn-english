@@ -11,7 +11,7 @@ import { useState } from "react";
  * @returns {JSX.Element} The rendered component.
  */
 const App = () => {
-  // State to track authentication status
+  // State to track authentication status.
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   /**

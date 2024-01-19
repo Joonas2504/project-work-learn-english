@@ -121,7 +121,7 @@ const LearnView = () => {
   const handleSwitchLanguage = () => {
     setLanguageMode((prevMode) => (prevMode === "fi" ? "en" : "fi")); // Switch the language mode
 
-    // Clear the input fields
+    // Clear the input fields.
     setUserInputs(Array(10).fill(""));
     setCheckedAnswers(Array(10).fill(false));
   };

@@ -36,7 +36,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
  * @name POST /api/auth
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
- * @returns {Object} Response object indicating success or failure.
+ * @returns {Object} Response object indicating success or failure
  */
 app.post("/api/auth", (req, res) => {
   const { username, password } = req.body;

@@ -15,7 +15,7 @@ const { Validator } = require("jsonschema");
 const validator = new Validator();
 
 /**
- * JSON schema for validating a word pair.
+ * JSON schema for validating a word pair
  * @type {WordPairSchema}
  */
 const wordPairSchema = {

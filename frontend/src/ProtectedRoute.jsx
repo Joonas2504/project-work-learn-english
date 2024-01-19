@@ -11,7 +11,7 @@ import { Navigate } from "react-router-dom";
  * @returns {React.ReactNode|Navigate} - Returns the specified element if authenticated, otherwise a navigation component to the login page.
  */
 const ProtectedRoute = ({ element, isAuthenticated }) => {
-  // Render the specified element if authenticated, otherwise navigate to the login page
+  // Render the specified element if authenticated, otherwise navigate to the login page.
   return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
