@@ -14,7 +14,7 @@ const LoginView = ({ setIsAuthenticated }) => {
     event.preventDefault();
 
     // Send a POST request to the /api/auth endpoint
-    const response = await fetch("/api/auth", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

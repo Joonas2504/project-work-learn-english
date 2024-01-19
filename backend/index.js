@@ -6,10 +6,6 @@ const cors = require("cors");
 const port = 8080;
 const app = express();
 
-// Admin credentials
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
 
@@ -18,6 +14,13 @@ app.use(express.static("./frontend/dist"));
 
 // Add middleware to parse incoming JSON request bodies
 app.use(express.json());
+
+// Use the wordPairRouter for handling requests starting with "/api/word-pairs"
+app.use("/api/word-pairs", wordPairRouter);
+
+// Admin credentials
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Authentication endpoint
 app.post("/api/auth", (req, res) => {
@@ -28,9 +31,6 @@ app.post("/api/auth", (req, res) => {
     res.status(401).json({ success: false });
   }
 });
-
-// Use the wordPairRouter for handling requests starting with "/api/word-pairs"
-app.use("/api/word-pairs", wordPairRouter);
 
 let server = undefined;
 
