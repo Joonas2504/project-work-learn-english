@@ -2,6 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
+/**
+ * LoginView component for the login page.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setIsAuthenticated - Function to set authentication status.
+ * @returns {JSX.Element} The rendered component.
+ */
 const LoginView = ({ setIsAuthenticated }) => {
   // State to hold username and password input values
   const [username, setUsername] = useState("");
@@ -9,7 +16,13 @@ const LoginView = ({ setIsAuthenticated }) => {
   // Hook to navigate between routes
   const navigate = useNavigate();
 
-  // Handle form submission
+  /**
+   * Handles the form submission.
+   * @async
+   * @function
+   * @name handleSubmit
+   * @param {Event} event - The form submission event.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -63,7 +76,12 @@ const LoginView = ({ setIsAuthenticated }) => {
   );
 };
 
-// PropTypes for setIsAuthenticated prop
+/**
+ * PropTypes for the LoginView component.
+ * @name propTypes
+ * @type {Object}
+ * @property {Function} setIsAuthenticated - Function to set authentication status.
+ */
 LoginView.propTypes = {
   setIsAuthenticated: PropTypes.func.isRequired, // Function to set authentication status
 };

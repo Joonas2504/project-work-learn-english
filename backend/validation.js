@@ -1,7 +1,23 @@
+/**
+ * JSON schema for validating a word pair.
+ * @typedef {Object} WordPairSchema
+ * @property {string} finnish_word - The Finnish word in the word pair.
+ * @property {string} english_word - The English word in the word pair.
+ */
+
+/**
+ * JSON schema for validating an ID.
+ * @typedef {Object} IdSchema
+ * @property {number} - The ID to be validated.
+ */
+
 const { Validator } = require("jsonschema");
 const validator = new Validator();
 
-// Define JSON schemas for validation
+/**
+ * JSON schema for validating a word pair.
+ * @type {WordPairSchema}
+ */
 const wordPairSchema = {
   type: "object",
   properties: {
@@ -21,12 +37,22 @@ const wordPairSchema = {
   required: ["finnish_word", "english_word"],
 };
 
+/**
+ * JSON schema for validating an ID.
+ * @type {IdSchema}
+ */
 const idSchema = {
   type: "integer",
   minimum: 1,
 };
 
-// Function to validate a word pair against the schema
+/**
+ * Function to validate a word pair against the schema.
+ * @param {WordPairSchema} wordPair - The word pair to be validated.
+ * @returns {Object} Validation result object.
+ * @property {boolean} valid - Whether the word pair is valid.
+ * @property {Array} errors - Validation errors, if any.
+ */
 const validateWordPair = (wordPair) => {
   const result = validator.validate(wordPair, wordPairSchema);
   return {
@@ -35,7 +61,13 @@ const validateWordPair = (wordPair) => {
   };
 };
 
-// Function to validate an ID against the schema
+/**
+ * Function to validate an ID against the schema.
+ * @param {number} id - The ID to be validated.
+ * @returns {Object} Validation result object.
+ * @property {boolean} valid - Whether the ID is valid.
+ * @property {Array} errors - Validation errors, if any.
+ */
 const validateId = (id) => {
   const result = validator.validate(id, idSchema);
   return {
@@ -44,6 +76,12 @@ const validateId = (id) => {
   };
 };
 
+/**
+ * Validation module exports.
+ * @module validation
+ * @property {function} validateWordPair - Function to validate a word pair against the schema.
+ * @property {function} validateId - Function to validate an ID against the schema.
+ */
 module.exports = {
   validateWordPair,
   validateId,

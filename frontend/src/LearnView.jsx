@@ -2,7 +2,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-// Define the LearnView component
+/**
+ * LearnView component for the learning page.
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ */
 const LearnView = () => {
   // Define state variables
   const [wordPairs, setWordPairs] = useState([]); // Holds the word pairs fetched from the API
@@ -14,7 +18,12 @@ const LearnView = () => {
   const [checkedAnswers, setCheckedAnswers] = useState(Array(10).fill(false)); // Holds the checked status of each answer
   const [showCongrats, setShowCongrats] = useState(false); // Holds the status of the congratulations message
 
-  // Fetch word pairs from the API when the component mounts
+  /**
+   * Fetches word pairs from the API.
+   * @async
+   * @function
+   * @name fetchData
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,14 +39,25 @@ const LearnView = () => {
     fetchData();
   }, []);
 
-  // Handle changes to the input fields
+  /**
+   * Handles changes to the input fields.
+   * @function
+   * @name handleInputChange
+   * @param {number} index - The index of the input field.
+   * @param {Event} event - The input change event.
+   */
   const handleInputChange = (index, event) => {
     const newInputs = [...userInputs];
     newInputs[index] = event.target.value; // Update the value of the changed input field
     setUserInputs(newInputs); // Update the userInputs state
   };
 
-  // Handle the Check Answer button click
+  /**
+   * Handles the Check Answer button click.
+   * @function
+   * @name handleCheckAnswer
+   * @param {number} index - The index of the checked answer.
+   */
   const handleCheckAnswer = (index) => {
     if (checkedAnswers[index]) {
       return; // If the answer has already been checked, do nothing
@@ -75,7 +95,11 @@ const LearnView = () => {
     }
   };
 
-  // Handle the Generate New Words button click
+  /**
+   * Handles the Generate New Words button click.
+   * @function
+   * @name handleGenerateNewWords
+   */
   const handleGenerateNewWords = () => {
     const newCurrentIndex = currentWordIndex + 10; // Calculate the new current word index
     setCurrentWordIndex(
@@ -89,7 +113,11 @@ const LearnView = () => {
     setShowCongrats(false); // Reset the congratulations message
   };
 
-  // Handle the Switch Language button click
+  /**
+   * Handles the Switch Language button click.
+   * @function
+   * @name handleSwitchLanguage
+   */
   const handleSwitchLanguage = () => {
     setLanguageMode((prevMode) => (prevMode === "fi" ? "en" : "fi")); // Switch the language mode
 
@@ -106,7 +134,23 @@ const LearnView = () => {
 
   return (
     <div>
-      <h1>Learn Words</h1>
+      <h1>Welcome To Learn English</h1>
+      <br />
+      {/* Display the user's score */}
+      <p>Score: {score}</p>
+      {/* Button to generate new words */}
+      <button onClick={handleGenerateNewWords}>Generate New Words</button>
+      {/* Button to switch the language mode */}
+      <button onClick={handleSwitchLanguage}>
+        Switch to {languageMode === "fi" ? "English" : "Finnish"}
+      </button>
+      {/* Display feedback if there is any */}
+      {feedback && <p>{feedback}</p>}
+      {/* Display a congratulations message when the user has answered all word pairs correctly */}
+      {showCongrats && (
+        <p>Congratulations! You have completed the word pairs.</p>
+      )}
+
       {/* Check if there are words to display */}
       {wordsToDisplay.length > 0 && (
         <table>
@@ -146,20 +190,6 @@ const LearnView = () => {
             ))}
           </tbody>
         </table>
-      )}
-      {/* Button to generate new words */}
-      <button onClick={handleGenerateNewWords}>Generate New Words</button>
-      {/* Button to switch the language mode */}
-      <button onClick={handleSwitchLanguage}>
-        Switch to {languageMode === "fi" ? "English" : "Finnish"}
-      </button>
-      {/* Display the user's score */}
-      <p>Score: {score}</p>
-      {/* Display feedback if there is any */}
-      {feedback && <p>{feedback}</p>}
-      {/* Display a congratulations message when the user has answered all word pairs correctly */}
-      {showCongrats && (
-        <p>Congratulations! You have completed the word pairs.</p>
       )}
     </div>
   );

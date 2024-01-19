@@ -5,13 +5,19 @@ import LoginView from "./LoginView";
 import ProtectedRoute from "./ProtectedRoute";
 import { useState } from "react";
 
-// ... (other imports)
-
+/**
+ * Main App component representing the application's entry point.
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ */
 const App = () => {
   // State to track authentication status
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Function to handle logout and update authentication status
+  /**
+   * Function to handle logout and update authentication status.
+   * @function
+   */
   const handleLogout = () => {
     setIsAuthenticated(false);
   };

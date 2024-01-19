@@ -3,7 +3,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-// Define the AdminView component
+/**
+ * AdminView component for managing word pairs.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {function} props.onLogout - The function to call when logging out.
+ * @returns {JSX.Element} The rendered component.
+ */
 const AdminView = () => {
   // Define state variables
   const [wordPairs, setWordPairs] = useState([]); // Holds the word pairs fetched from the API
@@ -17,7 +23,12 @@ const AdminView = () => {
   const [deleteId, setDeleteId] = useState(""); // Holds the ID of the word pair to be deleted
   const [showWordPairs, setShowWordPairs] = useState(false);
 
-  // Fetch word pairs from the API when showWordPairs changes to true
+  /**
+   * Fetches word pairs from the API when showWordPairs changes to true.
+   * @function
+   * @async
+   * @param {boolean} showWordPairs - Indicates whether to fetch and display word pairs.
+   */
   useEffect(() => {
     const fetchData = async () => {
       if (showWordPairs) {
@@ -35,7 +46,12 @@ const AdminView = () => {
     fetchData();
   }, [showWordPairs]); // Dependency array includes showWordPairs
 
-  // Fetch a word pair when updateId.id changes
+  /**
+   * Fetches a word pair when updateId.id changes.
+   * @function
+   * @async
+   * @param {Object} updateId - The object containing the id and index of the word pair to be updated.
+   */
   useEffect(() => {
     const fetchWordPair = async () => {
       if (updateId.id) {
@@ -54,7 +70,11 @@ const AdminView = () => {
     fetchWordPair();
   }, [updateId.id]); // Only trigger the effect when updateId.id changes
 
-  // Handle the Add Word Pair button click
+  /**
+   * Handles the Add Word Pair button click.
+   * @function
+   * @async
+   */
   const handleAddWordPair = async () => {
     // Check if the new Finnish or English word is empty
     if (!newFinnishWord || !newEnglishWord) {
@@ -101,7 +121,11 @@ const AdminView = () => {
     }
   };
 
-  // Fetch a word pair by its ID
+  /**
+   * Fetches a word pair by its ID.
+   * @function
+   * @async
+   */
   const handleFetchById = async () => {
     try {
       const response = await axios.get(
@@ -120,7 +144,11 @@ const AdminView = () => {
     }
   };
 
-  // Handle the update of a word pair
+  /**
+   * Handles the update of a word pair.
+   * @function
+   * @async
+   */
   const handleUpdateWordPair = async () => {
     // Check if the updated Finnish or English word is empty
     if (!updateFinnishWord || !updateEnglishWord) {
@@ -184,7 +212,11 @@ const AdminView = () => {
     }
   };
 
-  // Handle the fetch of a word pair for deletion
+  /**
+   * Handles the fetch of a word pair for deletion.
+   * @function
+   * @async
+   */
   const handleFetchForDelete = async () => {
     try {
       // Send a GET request to the server to fetch the word pair
@@ -203,7 +235,11 @@ const AdminView = () => {
     }
   };
 
-  // Handle the deletion of a word pair
+  /**
+   * Handles the deletion of a word pair.
+   * @function
+   * @async
+   */
   const handleDeleteWordPair = async () => {
     // Check if a word pair has been fetched for deletion
     if (!deleteWordPair || !deleteWordPair.id) {

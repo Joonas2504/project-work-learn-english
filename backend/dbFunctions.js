@@ -3,7 +3,9 @@ require("dotenv").config();
 const mysql = require("mysql");
 const { validateWordPair, validateId } = require("./validation");
 
-// Create a connection pool for MySQL database
+/**
+ * Create a connection pool to the database using the environment variables
+ */
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: process.env.HOST,
@@ -12,11 +14,22 @@ const pool = mysql.createPool({
   database: process.env.DATABASE,
 });
 
-// Export the database functions
+/**
+ * Export the database functions
+ * @module backend/dbFunctions
+ */
 module.exports = {
+  /**
+   * The database connection pool
+   * @type {Pool}
+   */
   connectionPool: pool,
 
-  // Retrieve all word pairs from the database
+  /**
+   * Retrieve all word pairs from the database
+   * @returns {Promise} A promise that resolves with the retrieved word pairs
+   * @throws {Promise} A promise that rejects with an error object
+   */
   getAll: () => {
     return new Promise((resolve, reject) => {
       // SQL query to select all rows from the 'word_pairs' table
@@ -33,7 +46,12 @@ module.exports = {
     });
   },
 
-  // Retrieve a word pair from the database by ID
+  /**
+   * Retrieve a word pair from the database by ID
+   * @param {number} id The ID of the word pair to retrieve
+   * @returns {Promise} A promise that resolves with the retrieved word pair
+   * @throws {Promise} A promise that rejects with an error object
+   */
   getByID: (id) => {
     return new Promise((resolve, reject) => {
       // Validate the ID against the predefined schema
@@ -61,7 +79,12 @@ module.exports = {
     });
   },
 
-  // Save a new word pair to the database
+  /**
+   * Save a new word pair to the database
+   * @param {object} wordPair The word pair to save
+   * @returns {Promise} A promise that resolves with the saved word pair
+   * @throws {Promise} A promise that rejects with an error object
+   */
   save: (wordPair) => {
     return new Promise((resolve, reject) => {
       // Validate the word pair against the predefined schema
@@ -106,7 +129,12 @@ module.exports = {
     });
   },
 
-  // Delete a word pair from the database by ID
+  /**
+   * Delete a word pair from the database by ID
+   * @param {number} id The ID of the word pair to delete
+   * @returns {Promise} A promise that resolves when the word pair is deleted
+   * @throws {Promise} A promise that rejects with an error object
+   */
   delete: (id) => {
     return new Promise((resolve, reject) => {
       // Validate the ID against the predefined schema
@@ -135,7 +163,13 @@ module.exports = {
     });
   },
 
-  // Update a word pair in the database
+  /**
+   * Update a word pair in the database by ID
+   * @param {number} id The ID of the word pair to update
+   * @param {object} wordPair The word pair to update
+   * @returns {Promise} A promise that resolves when the word pair is updated
+   * @throws {Promise} A promise that rejects with an error object
+   */
   update: (id, wordPair) => {
     return new Promise((resolve, reject) => {
       // Validate the word pair against the predefined schema

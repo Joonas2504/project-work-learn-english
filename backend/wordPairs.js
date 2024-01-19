@@ -1,11 +1,29 @@
+/**
+ * Express Router for handling word pair endpoints.
+ * @module backend/wordPairs
+ * @requires express
+ * @requires backend/dbFunctions
+ */
+
 // Importing necessary modules and functions
 const express = require("express");
 const db = require("./dbFunctions");
 
-// Creating an instance of an Express Router
+/**
+ * Instance of an Express Router to handle word pair endpoints.
+ * @type {express.Router}
+ */
 const pairRouter = express.Router();
 
-// Endpoint to retrieve all word pairs
+/**
+ * Endpoint to retrieve all word pairs.
+ * @name GET /api/word-pairs
+ * @function
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {undefined}
+ */
 pairRouter.get("/", async (req, res) => {
   try {
     // Fetching all word pairs from the database
@@ -20,7 +38,15 @@ pairRouter.get("/", async (req, res) => {
   }
 });
 
-// Endpoint to retrieve a word pair by ID
+/**
+ * Endpoint to retrieve a word pair by ID.
+ * @name GET /api/word-pairs/:myId
+ * @function
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {undefined}
+ */
 pairRouter.get("/:myId([0-9]+)", async (req, res) => {
   // Extracting the ID from the request parameters
   const id = parseInt(req.params.myId);
@@ -36,7 +62,15 @@ pairRouter.get("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// Endpoint to add a new word pair
+/**
+ * Endpoint to add a new word pair.
+ * @name POST /api/word-pairs
+ * @function
+ * @async
+ * @param {Object} req - Express request object with the new word pair data in the body.
+ * @param {Object} res - Express response object.
+ * @returns {undefined}
+ */
 pairRouter.post("/", async (req, res) => {
   try {
     // Saving the new word pair to the database
@@ -51,7 +85,15 @@ pairRouter.post("/", async (req, res) => {
   }
 });
 
-// Endpoint to delete a word pair by ID
+/**
+ * Endpoint to delete a word pair by ID.
+ * @name DELETE /api/word-pairs/:myId
+ * @function
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {undefined}
+ */
 pairRouter.delete("/:myId([0-9]+)", async (req, res) => {
   // Extracting the ID from the request parameters
   const id = parseInt(req.params.myId);
@@ -69,7 +111,15 @@ pairRouter.delete("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// Endpoint to update a word pair by ID
+/**
+ * Endpoint to update a word pair by ID.
+ * @name PUT /api/word-pairs/:myId
+ * @function
+ * @async
+ * @param {Object} req - Express request object with the updated word pair data in the body.
+ * @param {Object} res - Express response object.
+ * @returns {undefined}
+ */
 pairRouter.put("/:myId([0-9]+)", async (req, res) => {
   // Extracting the ID and updated pair data from the request parameters and body
   const id = parseInt(req.params.myId);
@@ -88,5 +138,8 @@ pairRouter.put("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// Exporting the router for use in other modules
+/**
+ * Exporting the router for use in other modules.
+ * @type {express.Router}
+ */
 module.exports = pairRouter;

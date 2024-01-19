@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: LearnView.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: LearnView.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Import necessary hooks and axios for API calls
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+/**
+ * LearnView component for the learning page.
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ */
+const LearnView = () => {
+  // Define state variables
+  const [wordPairs, setWordPairs] = useState([]); // Holds the word pairs fetched from the API
+  const [currentWordIndex, setCurrentWordIndex] = useState(0); // Index of the current word pair
+  const [userInputs, setUserInputs] = useState(Array(10).fill("")); // Holds the user's input for each word pair
+  const [score, setScore] = useState(0); // Holds the user's score
+  const [feedback, setFeedback] = useState(""); // Holds feedback messages
+  const [languageMode, setLanguageMode] = useState("fi"); // Holds the current language mode (Finnish or English)
+  const [checkedAnswers, setCheckedAnswers] = useState(Array(10).fill(false)); // Holds the checked status of each answer
+  const [showCongrats, setShowCongrats] = useState(false); // Holds the status of the congratulations message
+
+  /**
+   * Fetches word pairs from the API.
+   * @async
+   * @function
+   * @name fetchData
+   */
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/word-pairs`
+        );
+        setWordPairs(response.data); // Update the wordPairs state with the fetched data
+      } catch (error) {
+        console.error("Error fetching word pairs:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  /**
+   * Handles changes to the input fields.
+   * @function
+   * @name handleInputChange
+   * @param {number} index - The index of the input field.
+   * @param {Event} event - The input change event.
+   */
+  const handleInputChange = (index, event) => {
+    const newInputs = [...userInputs];
+    newInputs[index] = event.target.value; // Update the value of the changed input field
+    setUserInputs(newInputs); // Update the userInputs state
+  };
+
+  /**
+   * Handles the Check Answer button click.
+   * @function
+   * @name handleCheckAnswer
+   * @param {number} index - The index of the checked answer.
+   */
+  const handleCheckAnswer = (index) => {
+    if (checkedAnswers[index]) {
+      return; // If the answer has already been checked, do nothing
+    }
+
+    const currentPair = wordPairs[currentWordIndex + index]; // Get the current word pair
+    const correctAnswer =
+      languageMode === "fi"
+        ? currentPair.english_word
+        : currentPair.finnish_word; // Determine the correct answer based on the language mode
+
+    // Check the user's input against the correct answer
+    if (userInputs[index].toLowerCase() === correctAnswer.toLowerCase()) {
+      setScore(score + 1); // If the answer is correct, increment the score
+      setFeedback("Correct!"); // Provide feedback
+
+      const newCheckedAnswers = [...checkedAnswers];
+      newCheckedAnswers[index] = true; // Mark the answer as checked
+      setCheckedAnswers(newCheckedAnswers); // Update the checkedAnswers state
+
+      // If the score is a multiple of 10, display the congratulations message
+      if ((score + 1) % 10 === 0) {
+        setShowCongrats(true);
+      }
+    } else {
+      setFeedback("Incorrect. Try again!"); // Provide feedback
+
+      // Reset user input and feedback after a brief delay
+      setTimeout(() => {
+        const newInputs = [...userInputs];
+        newInputs[index] = ""; // Clear only the incorrect answer
+        setUserInputs(newInputs); // Update the userInputs state
+        setFeedback(""); // Clear the feedback
+      }, 1000);
+    }
+  };
+
+  /**
+   * Handles the Generate New Words button click.
+   * @function
+   * @name handleGenerateNewWords
+   */
+  const handleGenerateNewWords = () => {
+    const newCurrentIndex = currentWordIndex + 10; // Calculate the new current word index
+    setCurrentWordIndex(
+      newCurrentIndex &lt; wordPairs.length ? newCurrentIndex : 0
+    ); // Update the currentWordIndex state, or reset it to 0 if the end of the word pairs list is reached
+
+    // Reset user input and feedback
+    setUserInputs(Array(10).fill(""));
+    setFeedback("");
+    setCheckedAnswers(Array(10).fill(false));
+    setShowCongrats(false); // Reset the congratulations message
+  };
+
+  /**
+   * Handles the Switch Language button click.
+   * @function
+   * @name handleSwitchLanguage
+   */
+  const handleSwitchLanguage = () => {
+    setLanguageMode((prevMode) => (prevMode === "fi" ? "en" : "fi")); // Switch the language mode
+
+    // Clear the input fields
+    setUserInputs(Array(10).fill(""));
+    setCheckedAnswers(Array(10).fill(false));
+  };
+
+  // Determine the word pairs to display
+  const wordsToDisplay = wordPairs.slice(
+    currentWordIndex,
+    currentWordIndex + 10
+  );
+
+  return (
+    &lt;div>
+      &lt;h1>Welcome To Learn English&lt;/h1>
+      &lt;br />
+      {/* Display the user's score */}
+      &lt;p>Score: {score}&lt;/p>
+      {/* Button to generate new words */}
+      &lt;button onClick={handleGenerateNewWords}>Generate New Words&lt;/button>
+      {/* Button to switch the language mode */}
+      &lt;button onClick={handleSwitchLanguage}>
+        Switch to {languageMode === "fi" ? "English" : "Finnish"}
+      &lt;/button>
+      {/* Display feedback if there is any */}
+      {feedback &amp;&amp; &lt;p>{feedback}&lt;/p>}
+      {/* Display a congratulations message when the user has answered all word pairs correctly */}
+      {showCongrats &amp;&amp; (
+        &lt;p>Congratulations! You have completed the word pairs.&lt;/p>
+      )}
+
+      {/* Check if there are words to display */}
+      {wordsToDisplay.length > 0 &amp;&amp; (
+        &lt;table>
+          &lt;thead>
+            &lt;tr>
+              {/* Display the language mode */}
+              &lt;th>{languageMode === "fi" ? "Finnish" : "English"}&lt;/th>
+              &lt;th>Answer&lt;/th>
+              &lt;th>Check&lt;/th>
+            &lt;/tr>
+          &lt;/thead>
+          &lt;tbody>
+            {/* Map through the words to display */}
+            {wordsToDisplay.map((pair, index) => (
+              &lt;tr key={index}>
+                &lt;td>
+                  {/* Display the word in the current language mode */}
+                  {languageMode === "fi"
+                    ? pair.finnish_word
+                    : pair.english_word}
+                &lt;/td>
+                &lt;td>
+                  {/* Input field for the user's answer */}
+                  &lt;input
+                    type="text"
+                    value={userInputs[index]}
+                    onChange={(event) => handleInputChange(index, event)}
+                  />
+                &lt;/td>
+                &lt;td>
+                  {/* Button to check the user's answer */}
+                  &lt;button onClick={() => handleCheckAnswer(index)}>
+                    Check Answer
+                  &lt;/button>
+                &lt;/td>
+              &lt;/tr>
+            ))}
+          &lt;/tbody>
+        &lt;/table>
+      )}
+    &lt;/div>
+  );
+};
+
+export default LearnView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#LearnView">LearnView</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#handleCheckAnswer">handleCheckAnswer</a></li><li><a href="global.html#handleGenerateNewWords">handleGenerateNewWords</a></li><li><a href="global.html#handleInputChange">handleInputChange</a></li><li><a href="global.html#handleSwitchLanguage">handleSwitchLanguage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jan 19 2024 16:02:02 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
