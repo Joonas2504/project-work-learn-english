@@ -5,6 +5,8 @@ import LoginView from "./LoginView";
 import ProtectedRoute from "./ProtectedRoute";
 import { useState } from "react";
 
+// ... (other imports)
+
 const App = () => {
   // State to track authentication status
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,7 +26,13 @@ const App = () => {
               <Link to="/">Learn</Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
+              {isAuthenticated ? (
+                <Link to="/login" onClick={handleLogout}>
+                  Logout
+                </Link>
+              ) : (
+                <Link to="/login">Login</Link>
+              )}
             </li>
           </ul>
         </nav>
