@@ -21,6 +21,13 @@ Joonas Moilanen
 5. Using Docker: `docker-compose build` then `docker-compose up`.
 6. Follow link http://localhost:8080/ to use app.
 
+## Screenshots
+![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/123476ac-eb68-4e5b-9735-ae30c8899b11) ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/ce2a91e3-59d8-4bca-8c44-3ace5edcae96)
+
+![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/f694848f-a75a-4470-ada3-f24605375581) ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/2975ac10-a2db-48fc-af9f-8fb6f2ff635d)
+
+![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/d8d23f3f-bab7-40d3-ae15-76ff4a422526) ![image](https://github.com/Joonas2504/project-work-learn-english/assets/113358683/c52820d7-b603-42d3-b068-02cb996766ab)
+
 ## Links
 ### Cloud
 - https://learn-english-app-274f.onrender.com/
