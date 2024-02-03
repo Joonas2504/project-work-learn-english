@@ -33,9 +33,7 @@ Joonas Moilanen
 ### Cloud
 - https://learn-english-app-274f.onrender.com/
 ### Screencast
-- [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/T16MrtFCfr0/0.jpg)](https://www.youtube.com/watch?v=T16MrtFCfr0)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/T16MrtFCfr0/0.jpg)](https://www.youtube.com/watch?v=T16MrtFCfr0)
 
-## Credentials for admin
-- Username = Admin
-- Password = Admin1234
+
 
